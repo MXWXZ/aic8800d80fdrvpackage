@@ -337,6 +337,9 @@ enum rwnx_ap_flags {
  *
  */
 struct rwnx_vif {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 7, 0)
+    struct mutex wdev_mutex;
+#endif
     struct list_head list;
     struct rwnx_hw *rwnx_hw;
     struct wireless_dev wdev;
