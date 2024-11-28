@@ -1057,8 +1057,8 @@ static void rwnx_csa_finish(struct work_struct *ws)
         cfg80211_disconnected(vif->ndev, 0, NULL, 0, 0, GFP_KERNEL);
         #endif
     } else {
-        mutex_lock(&vif->wdev.mtx);
-        __acquire(&vif->wdev.mtx);
+        mutex_lock(&vif->wdev_mutex);
+        __acquire(&vif->wdev_mutex);
         spin_lock_bh(&rwnx_hw->cb_lock);
         rwnx_chanctx_unlink(vif);
         rwnx_chanctx_link(vif, csa->ch_idx, &csa->chandef);
@@ -1075,8 +1075,8 @@ static void rwnx_csa_finish(struct work_struct *ws)
 #else
 		cfg80211_ch_switch_notify(vif->ndev, &csa->chandef);
 #endif
-        mutex_unlock(&vif->wdev.mtx);
-        __release(&vif->wdev.mtx);
+        mutex_unlock(&vif->wdev_mutex);
+        __release(&vif->wdev_mutex);
     }
     rwnx_del_csa(vif);
 }
@@ -5018,9 +5018,17 @@ static int rwnx_cfg80211_start_ap(struct wiphy *wiphy, struct net_device *dev,
  * @change_beacon: Change the beacon parameters for an access point mode
  *	interface. This should reject the call when AP mode wasn't started.
  */
-static int rwnx_cfg80211_change_beacon(struct wiphy *wiphy, struct net_device *dev,
-                                       struct cfg80211_beacon_data *info)
-{
+static int rwnx_cfg80211_change_beacon(struct wiphy *wiphy,
+                                       struct net_device *dev,
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 7, 0))
+                                       struct cfg80211_ap_update *params
+#else
+                                       struct cfg80211_beacon_data *info
+#endif
+) {
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 7, 0))
+    struct cfg80211_beacon_data *info = &params->beacon;
+#endif
     struct rwnx_hw *rwnx_hw = wiphy_priv(wiphy);
     struct rwnx_vif *vif = netdev_priv(dev);
     struct rwnx_bcn *bcn = &vif->ap.bcn;
