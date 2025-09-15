@@ -11,8 +11,6 @@
 #ifndef _RWNX_CFGFILE_H_
 #define _RWNX_CFGFILE_H_
 
-#include "lmac_msg.h"
-#include <linux/if_ether.h>
 /*
  * Structure used to retrieve information from the Config file used at Initialization time
  */

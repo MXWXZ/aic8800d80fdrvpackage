@@ -1,6 +1,7 @@
 #!/bin/bash
 rm /etc/udev/rules.d/aic.rules
 udevadm control --reload
+rm /usr/local/bin/usb-eject-delay.sh
 echo "Uninstall aic8800 wifi driver!!!!!"
 rmmod aic8800_fdrv
 rmmod aic_load_fw

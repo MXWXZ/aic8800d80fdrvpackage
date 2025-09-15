@@ -21,26 +21,32 @@
 
 /* USB Device ID */
 #define USB_VENDOR_ID_AIC               0xA69C
+#define USB_VENDOR_ID_AIC_V2            0x368B
 #define USB_DEVICE_ID_AIC               0x8800
-#define USB_DEVICE_ID_AIC_8801		    0x8801
+#define USB_DEVICE_ID_AIC_8801          0x8801
 
 #define CHIP_REV_U01        0x1
 #define CHIP_REV_U02        0x3
 #define CHIP_REV_U03        0x7
+#define CHIP_REV_U04        0xf
+#define CHIP_REV_U05        0x1f
 #define CHIP_SUB_REV_U04    0x20
 
 enum AICWF_IC{
     PRODUCT_ID_AIC8800 =   0,
-	PRODUCT_ID_AIC8801,
-	PRODUCT_ID_AIC8800DC,
-	PRODUCT_ID_AIC8800DW,
-	PRODUCT_ID_AIC8800D80,
-	PRODUCT_ID_AIC8800D81,
+    PRODUCT_ID_AIC8801,
+    PRODUCT_ID_AIC8800DC,
+    PRODUCT_ID_AIC8800DW,
+    PRODUCT_ID_AIC8800D80,
+    PRODUCT_ID_AIC8800D81,
+    PRODUCT_ID_AIC8800D80X2,
+    PRODUCT_ID_AIC8800D81X2,
+    PRODUCT_ID_AIC8800D89X2,
 };
 
 
 #define AICWF_USB_RX_URBS               (20)
-#define AICWF_USB_TX_URBS               (100)
+#define AICWF_USB_TX_URBS               (30)
 #define AICWF_USB_TX_LOW_WATER          (AICWF_USB_TX_URBS/4)
 #define AICWF_USB_TX_HIGH_WATER         (AICWF_USB_TX_LOW_WATER*3)
 #define AICWF_USB_MAX_PKT_SIZE          (2048)
@@ -210,6 +216,7 @@ struct aic_usb_dev {
     u16 chipid;
     bool tbusy;
     bool app_cmp;
+    u32 fw_version_uint;
 };
 
 extern void aicwf_usb_exit(void);
